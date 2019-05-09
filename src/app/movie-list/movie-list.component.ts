@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ApiMoviesService } from '../api-movies.service';
-
 
 @Component({
   selector: 'app-movie-list',
@@ -9,10 +8,12 @@ import { ApiMoviesService } from '../api-movies.service';
   styleUrls: ['./movie-list.component.scss'],
 })
 export class MovieListComponent implements OnInit, OnDestroy {
-  type:string;
-  typeSubscription:any;
-  movies: object[] = [];
-  constructor(private route: ActivatedRoute, private api: ApiMoviesService ) { }
+  type: string;
+  typeSubscription: any;
+  // movies: object[] = [];
+  movies: Array<object> = [];
+  validTypes = ['top_rated', 'popular', 'upcoming'];
+  constructor(private route: ActivatedRoute, private api: ApiMoviesService, private router: Router) {}
 
   // sin subscription
   //   ngOnInit() {
@@ -20,16 +21,18 @@ export class MovieListComponent implements OnInit, OnDestroy {
   // }
   ngOnInit() {
     this.typeSubscription = this.route.params.subscribe(params => {
-      this.type = params.type;
-      this.api.getMovies(this.type).subscribe(res => {
-        console.log(res);
+      this.type = params.type.replace('_', ' ');
 
-      })
-
-    })
+      if (this.validTypes.includes(params.type)) {
+        this.api.getMovies(params.type).subscribe(res => {
+          console.log(res);
+        });
+      } else {
+        this.router.navigate(['/movies/popular']);
+      }
+    });
   }
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.typeSubscription.unsubscribe();
   }
-
 }
