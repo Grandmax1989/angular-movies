@@ -1,5 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ApiMoviesService } from '../api-movies.service';
+
 
 @Component({
   selector: 'app-movie-list',
@@ -9,7 +11,8 @@ import { ActivatedRoute } from '@angular/router';
 export class MovieListComponent implements OnInit, OnDestroy {
   type:string;
   typeSubscription:any;
-  constructor(private route: ActivatedRoute) { }
+  movies: object[] = [];
+  constructor(private route: ActivatedRoute, private api: ApiMoviesService ) { }
 
   // sin subscription
   //   ngOnInit() {
@@ -17,7 +20,12 @@ export class MovieListComponent implements OnInit, OnDestroy {
   // }
   ngOnInit() {
     this.typeSubscription = this.route.params.subscribe(params => {
-      this.type = params.type
+      this.type = params.type;
+      this.api.getMovies(this.type).subscribe(res => {
+        console.log(res);
+
+      })
+
     })
   }
   ngOnDestroy(){
