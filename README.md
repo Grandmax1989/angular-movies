@@ -3,12 +3,10 @@
 
 Proyecto didáctico con Angular 7, Servicios , API-Rest de terceros y  layout con grid y flex.
 
----
-
 ## Demo
 
 
-[VER]()
+[VER](https://geekshubsacademy.github.io/angular-movies/)
 
 ---
 
