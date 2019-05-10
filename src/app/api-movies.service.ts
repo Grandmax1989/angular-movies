@@ -2,18 +2,22 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ApiMoviesService {
   urlBase = `https://api.themoviedb.org/3/`;
   key = '323112ea2281b9eb70f319f4df422c6b';
   generateUrl = (_type: string) => this.urlBase + `movie/${_type}?api_key=` + this.key;
 
-  constructor(private http: HttpClient){
+  constructor(private http: HttpClient) {}
+
+  getMovies(type: string) {
+    return this.http.get(this.generateUrl(type));
   }
-
-  getMovies(type: string){
-
-    return this.http.get(this.generateUrl(type))
+  getMovie(id: string) {
+    return this.http.get(this.generateUrl(id));
+  }
+  getRelatedMovies(id: string) {
+    return this.http.get(this.generateUrl(id + '/similar'));
   }
 }
